@@ -8,8 +8,8 @@ using UnityEngine.UI;
 [Serializable]
 public class Score
 {
-    public Guid id;
-    public Guid playerId;
+    public string id;
+    public string playerId;
     public int value;
     public DateTime date;
 }
@@ -20,15 +20,28 @@ public class Leaderboard
     public List<Score> scores;
 }
 
+[Serializable]
 public class Player
 {
-    public Guid id;
+    public string id;
     public string name;
+}
+
+[Serializable]
+public class PlayerList
+{
+    public List<Player> players;
 }
 
 public class ApiFunctions
 {
-    public static Guid playerId = new Guid("879b08d8-e8e4-4839-be8e-4959785441af");
+    public static string playerId = "879b08d8-e8e4-4839-be8e-4959785441af";
+    private static List<Player> players = new List<Player>();
+
+    public static void SetCurrentPlayer(int playerIndex)
+    {
+        playerId = players[playerIndex].id;
+    }
 
     public static void PostScore(int score)
     {
@@ -57,20 +70,58 @@ public class ApiFunctions
 
             foreach (Score score in board.scores)
             {
-                /*UnityWebRequest nameRequest = UnityWebRequest.Get("localhost:5000/api/players/" + score.playerId);
+                UnityWebRequest nameRequest = UnityWebRequest.Get("localhost:5000/api/players/" + score.playerId);
                 nameRequest.chunkedTransfer = false;
                 yield return nameRequest.SendWebRequest();
 
-                Debug.Log("Data: " + nameRequest.downloadHandler.text);
-                string playerJson = nameRequest.downloadHandler.text;
-                Player player = JsonUtility.FromJson<Player>(playerJson);*/
+                if (!nameRequest.isNetworkError && !nameRequest.isHttpError)
+                {
+                    Debug.Log("Data: " + nameRequest.downloadHandler.text);
+                    string playerJson = nameRequest.downloadHandler.text;
+                    Player player = JsonUtility.FromJson<Player>(playerJson);
 
-                result += score.value + "\n";
-                Debug.Log("Add: " + score.value);
+                    result += player.name + ": " + score.value + "\n";
+                }
             }
 
             Debug.Log("Text:\n" + result);
             leaderboardText.GetComponent<Text>().text = result;
         }
+    }
+
+    public static IEnumerator GetPlayerNames(Dropdown playerSelect)
+    {
+        List<string> playerNames = new List<string>();
+
+        UnityWebRequest request = UnityWebRequest.Get("localhost:5000/api/players");
+        request.chunkedTransfer = false;
+        yield return request.SendWebRequest();
+
+        if (!request.isNetworkError && !request.isHttpError)
+        {
+            string json = "{\"players\":" + request.downloadHandler.text + "}";
+            PlayerList playerList = JsonUtility.FromJson<PlayerList>(json);
+
+            foreach (Player player in playerList.players)
+            {
+                players.Add(player);
+                playerNames.Add(player.name);
+            }
+        }
+
+        playerSelect.ClearOptions();
+        playerSelect.AddOptions(playerNames);
+    }
+
+    public static void AddPlayer(string playerName)
+    {
+        UnityWebRequest request = UnityWebRequest.Post("localhost:5000/api/players/" + playerName, "");
+        request.SendWebRequest();
+    }
+
+    public static void RenamePlayer(string playerName)
+    {
+        UnityWebRequest request = UnityWebRequest.Put("localhost:5000/api/players/" + playerId + "?name=" + playerName, "name=" + playerName);
+        request.SendWebRequest();
     }
 }

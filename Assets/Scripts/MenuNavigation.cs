@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuNavigation : MonoBehaviour {
 
@@ -8,6 +10,9 @@ public class MenuNavigation : MonoBehaviour {
     public GameObject Play;
     public GameObject Leaderboard;
     public GameObject LeaderboardText;
+    public Dropdown PlayerSelect;
+    public InputField RenameField;
+    public InputField AddField;
 
     // Use this for initialization
     void Start()
@@ -31,6 +36,8 @@ public class MenuNavigation : MonoBehaviour {
         MenuPanel.SetActive(false);
         Play.SetActive(true);
         Leaderboard.SetActive(false);
+
+        StartCoroutine(ApiFunctions.GetPlayerNames(PlayerSelect));
     }
 
     public void ShowMenuPanel()
@@ -44,5 +51,25 @@ public class MenuNavigation : MonoBehaviour {
     {
         Application.Quit();
         Debug.Log("Quit");
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("default");
+    }
+
+    public void SelectPlayer()
+    {
+        ApiFunctions.SetCurrentPlayer(PlayerSelect.value);
+    }
+
+    public void RenamePlayer()
+    {
+        ApiFunctions.RenamePlayer(RenameField.text);
+    }
+
+    public void AddPlayer()
+    {
+        ApiFunctions.AddPlayer(AddField.text);
     }
 }
