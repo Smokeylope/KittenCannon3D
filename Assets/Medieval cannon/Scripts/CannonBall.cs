@@ -26,8 +26,8 @@ public class CannonBall : MonoBehaviour {
         velocity += g;
         transform.position += velocity * Time.deltaTime;
 
-        string score = ((int) Mathf.Sqrt(Mathf.Pow(transform.position.x, 2.0f) + Mathf.Pow(transform.position.z, 2.0f))).ToString();
-        scoreText.GetComponent<TextMesh>().text = score;
+        int score = (int) Mathf.Sqrt(Mathf.Pow(transform.position.x, 2.0f) + Mathf.Pow(transform.position.z, 2.0f));
+        scoreText.GetComponent<TextMesh>().text = score.ToString();
 
         if (velocity.sqrMagnitude < 0.1f)
         {
@@ -40,6 +40,7 @@ public class CannonBall : MonoBehaviour {
 
         if (destroyTimer < 0.0f)
         {
+            ApiFunctions.PostScore(score);
             Destroy(gameObject);
         }
     }
