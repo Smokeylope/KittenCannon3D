@@ -54,9 +54,9 @@ public class ApiFunctions
         request.SendWebRequest();
     }
 
-    public static IEnumerator GetLeaderboard(GameObject leaderboardText)
+    public static IEnumerator GetLeaderboard(GameObject leaderboardNames, GameObject leaderboardScores)
     {
-        UnityWebRequest request = UnityWebRequest.Get("localhost:5000/api/scores");
+        UnityWebRequest request = UnityWebRequest.Get("localhost:5000/api/scores?count=8");
         request.chunkedTransfer = false;
         yield return request.SendWebRequest();
 
@@ -68,7 +68,8 @@ public class ApiFunctions
         {
             string json = "{\"scores\":" + request.downloadHandler.text + "}";
             Leaderboard board = JsonUtility.FromJson<Leaderboard>(json);
-            string result = "";
+            string namesText = "";
+            string scoresText = "";
 
             foreach (Score score in board.scores)
             {
@@ -82,12 +83,12 @@ public class ApiFunctions
                     string playerJson = nameRequest.downloadHandler.text;
                     Player player = JsonUtility.FromJson<Player>(playerJson);
 
-                    result += player.name + ": " + score.value + "\n";
+                    namesText += player.name + "\n";
+                    scoresText += score.value + "\n";
                 }
             }
-
-            Debug.Log("Text:\n" + result);
-            leaderboardText.GetComponent<Text>().text = result;
+            leaderboardNames.GetComponent<Text>().text = namesText;
+            leaderboardScores.GetComponent<Text>().text = scoresText;
         }
     }
 

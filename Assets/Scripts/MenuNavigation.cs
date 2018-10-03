@@ -9,7 +9,8 @@ public class MenuNavigation : MonoBehaviour {
     public GameObject MenuPanel;
     public GameObject Play;
     public GameObject Leaderboard;
-    public GameObject LeaderboardText;
+    public GameObject LeaderboardNames;
+    public GameObject LeaderboardScores;
     public Dropdown PlayerSelect;
     public InputField RenameField;
     public InputField AddField;
@@ -30,7 +31,7 @@ public class MenuNavigation : MonoBehaviour {
         Play.SetActive(false);
         Leaderboard.SetActive(true);
 
-        StartCoroutine(ApiFunctions.GetLeaderboard(LeaderboardText));
+        StartCoroutine(ApiFunctions.GetLeaderboard(LeaderboardNames, LeaderboardScores));
     }
 
     public void ShowPlay()
@@ -71,12 +72,14 @@ public class MenuNavigation : MonoBehaviour {
     {
         SelectPlayer();
         ApiFunctions.RenamePlayer(RenameField.text);
+        RenameField.text = "";
         StartCoroutine(ApiFunctions.GetPlayerNames(PlayerSelect));
     }
 
     public void AddPlayer()
     {
         ApiFunctions.AddPlayer(AddField.text);
+        AddField.text = "";
         StartCoroutine(ApiFunctions.GetPlayerNames(PlayerSelect));
     }
 
