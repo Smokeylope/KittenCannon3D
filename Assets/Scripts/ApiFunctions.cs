@@ -40,6 +40,8 @@ public class ApiFunctions
 
     public static void SetCurrentPlayer(int playerIndex)
     {
+        Debug.Log("Name: " + players[playerIndex].name);
+        Debug.Log("Id: " + players[playerIndex].id);
         playerId = players[playerIndex].id;
     }
 
@@ -91,6 +93,7 @@ public class ApiFunctions
 
     public static IEnumerator GetPlayerNames(Dropdown playerSelect)
     {
+        players.Clear();
         List<string> playerNames = new List<string>();
 
         UnityWebRequest request = UnityWebRequest.Get("localhost:5000/api/players");

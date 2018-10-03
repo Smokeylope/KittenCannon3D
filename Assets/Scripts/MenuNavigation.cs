@@ -57,16 +57,19 @@ public class MenuNavigation : MonoBehaviour {
 
     public void StartGame()
     {
+        ApiFunctions.SetCurrentPlayer(PlayerSelect.value);
         SceneManager.LoadScene("default");
     }
 
     public void SelectPlayer()
     {
+        Debug.Log("Selected player " + PlayerSelect.value);
         ApiFunctions.SetCurrentPlayer(PlayerSelect.value);
     }
 
     public void RenamePlayer()
     {
+        SelectPlayer();
         ApiFunctions.RenamePlayer(RenameField.text);
         StartCoroutine(ApiFunctions.GetPlayerNames(PlayerSelect));
     }
