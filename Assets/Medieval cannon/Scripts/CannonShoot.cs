@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CannonShoot : MonoBehaviour {
 
@@ -61,6 +62,11 @@ public class CannonShoot : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.RightArrow)||Input.GetKeyDown(KeyCode.LeftArrow))
         {
             platformClick.Play();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Scenes/MenuScene");
         }
 		
         if (Input.GetKey(KeyCode.LeftArrow)||turnLeft==true)
