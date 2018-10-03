@@ -11,6 +11,7 @@ public class MenuNavigation : MonoBehaviour {
     public GameObject Leaderboard;
     public GameObject LeaderboardNames;
     public GameObject LeaderboardScores;
+    public GameObject LeaderboardDates;
     public Dropdown PlayerSelect;
     public InputField RenameField;
     public InputField AddField;
@@ -31,7 +32,7 @@ public class MenuNavigation : MonoBehaviour {
         Play.SetActive(false);
         Leaderboard.SetActive(true);
 
-        StartCoroutine(ApiFunctions.GetLeaderboard(LeaderboardNames, LeaderboardScores));
+        StartCoroutine(ApiFunctions.GetLeaderboard(LeaderboardNames, LeaderboardScores, LeaderboardDates));
     }
 
     public void ShowPlay()

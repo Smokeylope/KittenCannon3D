@@ -11,7 +11,7 @@ public class Score
     public string id;
     public string playerId;
     public int value;
-    public DateTime date;
+    public string date;
 }
 
 [Serializable]
@@ -54,7 +54,7 @@ public class ApiFunctions
         request.SendWebRequest();
     }
 
-    public static IEnumerator GetLeaderboard(GameObject leaderboardNames, GameObject leaderboardScores)
+    public static IEnumerator GetLeaderboard(GameObject leaderboardNames, GameObject leaderboardScores, GameObject leaderboardDates)
     {
         UnityWebRequest request = UnityWebRequest.Get("localhost:5000/api/scores?count=8");
         request.chunkedTransfer = false;
@@ -70,6 +70,7 @@ public class ApiFunctions
             Leaderboard board = JsonUtility.FromJson<Leaderboard>(json);
             string namesText = "";
             string scoresText = "";
+            string datesText = "";
 
             foreach (Score score in board.scores)
             {
@@ -85,10 +86,12 @@ public class ApiFunctions
 
                     namesText += player.name + "\n";
                     scoresText += score.value + "\n";
+                    datesText += (DateTime.Parse(score.date)).ToShortDateString() + "\n";
                 }
             }
             leaderboardNames.GetComponent<Text>().text = namesText;
             leaderboardScores.GetComponent<Text>().text = scoresText;
+            leaderboardDates.GetComponent<Text>().text = datesText;
         }
     }
 
