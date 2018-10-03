@@ -961,9 +961,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb45fb82d1b3b14f9253857c9101e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectCount: 500
+  objectCount: 1000
   minDistance: 5
-  maxDistance: 200
+  maxDistance: 400
   objects:
   - {fileID: 1990676464591494, guid: 925a5a74113f330448ddd70083f9ed13, type: 2}
   - {fileID: 1734328693278616, guid: 2ea36963cdc0ba042a10a227d17bddea, type: 2}
@@ -1350,7 +1350,7 @@ AudioSource:
   m_Volume: 0.196
   m_Pitch: 1
   Loop: 1
-  Mute: 0
+  Mute: 1
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -2416,8 +2416,8 @@ MonoBehaviour:
   force: 40
   rotationSpeed: 30
   barrelSpeed: 10
-  maxBarrelTilt: 20
-  minBarrelTilt: -1
+  maxBarrelTilt: 30
+  minBarrelTilt: 0
   shotInterval: 3
   startClick: {fileID: 92778509}
   gunMoveSound: {fileID: 2115100695}

@@ -13,7 +13,7 @@ public class CannonBall : MonoBehaviour {
     [HideInInspector]
     public Vector3 velocity;
 
-    private float destroyTimer = 1.0f;
+    private float destroyTimer = 0.5f;
 
 	// Use this for initialization
 	void Start () {
@@ -29,9 +29,10 @@ public class CannonBall : MonoBehaviour {
         int score = (int) Mathf.Sqrt(Mathf.Pow(transform.position.x, 2.0f) + Mathf.Pow(transform.position.z, 2.0f));
         scoreText.GetComponent<TextMesh>().text = score.ToString();
 
-        if (velocity.sqrMagnitude < 0.1f)
+        if (velocity.sqrMagnitude < 0.5f)
         {
             destroyTimer -= Time.deltaTime;
+            transform.rotation = Quaternion.LookRotation(transform.position.normalized, Vector3.up);
         }
         else
         {
@@ -47,23 +48,25 @@ public class CannonBall : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (velocity.y <= 0f)
+        if (other.gameObject.tag == "Spikes" && velocity.y < 0.0f)
         {
-            if (other.gameObject.tag == "Spikes")
-            {
-                velocity = Vector3.zero;
-                gravity = 0.0f;
-            }
-            else if (other.gameObject.tag == "Explosive")
-            {
-                velocity.y = -velocity.y + explosionStrength;
-            }
-            else
-            {
-                transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
-                velocity.y = -velocity.y;
-                velocity *= bounciness;
-            }
+            velocity = Vector3.zero;
+            gravity = 0.0f;
+        }
+        else if (other.gameObject.tag == "Explosive")
+        {
+            velocity.y = explosionStrength;
+            Vector3 forceDirection = (transform.position - other.transform.root.position).normalized;
+            Vector3 force = Vector3.Project(forceDirection, transform.right) * explosionStrength;
+            velocity += force;
+
+            GetComponent<AudioSource>().Play();
+        }
+        else if (velocity.y < 0.0f)
+        {
+            transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+            velocity.y = -velocity.y;
+            velocity *= bounciness;
         }
     }
 }
