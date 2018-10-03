@@ -12,6 +12,8 @@ public class LevelGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        Random.InitState(1337);
+
 		for (int i = 0; i < objectCount; ++i)
         {
             float angle = Random.Range(0.0f, Mathf.PI * 2.0f);
