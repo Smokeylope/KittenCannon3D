@@ -20,6 +20,8 @@ public class MenuNavigation : MonoBehaviour {
         MenuPanel.SetActive(true);
         Play.SetActive(false);
         Leaderboard.SetActive(false);
+
+        StartCoroutine(UpdatePlayerSelection());
     }
 
     public void ShowLeaderboard()
@@ -66,10 +68,21 @@ public class MenuNavigation : MonoBehaviour {
     public void RenamePlayer()
     {
         ApiFunctions.RenamePlayer(RenameField.text);
+        StartCoroutine(ApiFunctions.GetPlayerNames(PlayerSelect));
     }
 
     public void AddPlayer()
     {
         ApiFunctions.AddPlayer(AddField.text);
+        StartCoroutine(ApiFunctions.GetPlayerNames(PlayerSelect));
+    }
+
+    private IEnumerator UpdatePlayerSelection()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+            yield return StartCoroutine(ApiFunctions.GetPlayerNames(PlayerSelect));
+        }
     }
 }
